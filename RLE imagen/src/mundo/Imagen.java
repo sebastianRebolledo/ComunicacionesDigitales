@@ -267,67 +267,7 @@ public class Imagen {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	public ArrayList<String> RLEMatrizColores(int matriz[][]) {
 
-		Queue<Integer> numeros = new LinkedList<Integer>();
-
-		for (int i = 0; i < alto; i++) {
-			for (int j = 0; j < ancho; j++) {
-				numeros.add(matriz[i][j]);
-
-			}
-		}
-
-		System.out.println("Verde " + numeros.size());
-		int contadorActual = 1;
-		int numeroSiguiente = 0;
-		String cantApareceNum = "";
-		boolean salir = false;
-		int contadorFila = 0;
-		ArrayList<String> filas = new ArrayList<String>();
-
-		while (!numeros.isEmpty() && !salir) {
-			
-			contadorFila++;
-			int numeroAnterior = numeros.remove();
-			if (!numeros.isEmpty()) {
-
-				numeroSiguiente = numeros.peek();
-
-			} else {
-				cantApareceNum += contadorActual + "-" + numeroAnterior + "-";
-
-				salir = true;
-			}
-
-			if (numeroAnterior == numeroSiguiente) {
-				contadorActual++;
-			} else {
-				if (salir == false) {
-					cantApareceNum += contadorActual + "-" + numeroAnterior + "-";
-					contadorActual = 1;
-				}
-
-			}
-
-			if (contadorFila == 120) {
-				filas.add(cantApareceNum);
-				cantApareceNum = "";
-				contadorActual = 1;
-				contadorFila = 0;
-			}
-
-		}
-
-		return filas;
-	}
 
 	/**
 	 * Este metodo agrega los numeros que se encuentran en la matriz que entra por
