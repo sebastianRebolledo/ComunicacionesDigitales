@@ -79,7 +79,7 @@ public class Main {
 		}
 
 		BufferedImage img = obj.imprimirImagen2(mtri1, mtri2, mtri3);
-		ImageIO.write(img, "jpg", new File("./src/salidaMeneUltimo.jpg"));
+		ImageIO.write(img, "jpg", new File("./src/salida rostro 1.jpg"));
 		
 
 
