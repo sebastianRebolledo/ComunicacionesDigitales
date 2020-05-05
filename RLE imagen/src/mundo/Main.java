@@ -33,7 +33,7 @@ public class Main {
 		ArrayList<String> filasRedBinarizada = obj.binarizarMatrizRLE(filasRed);
 		ArrayList<String> filasGreenBinarizada = obj.binarizarMatrizRLE(filasGreen);
 		ArrayList<String> filasBlueBinarizada = obj.binarizarMatrizRLE(filasBlue);
-
+		
         //Este metodo decodifica la informacion de binario al fomato incial RLE
 		ArrayList<String> decodificarRLERed = obj.decodificarRLEBinarizado(filasRedBinarizada);
 		ArrayList<String> decodificarRLEGrenn = obj.decodificarRLEBinarizado(filasGreenBinarizada);
@@ -77,11 +77,16 @@ public class Main {
 				}
 			}
 		}
-
+		
+		ArrayList<String> filas= obj.codificarMatrizColorCanar(filasBlueBinarizada);
+		for (int i = 0; i < filas.size(); i++) {
+			System.out.println(filas.get(i));
+		}
+		
+		
 		BufferedImage img = obj.imprimirImagen2(mtri1, mtri2, mtri3);
 		ImageIO.write(img, "jpg", new File("./src/salida rostro 1.jpg"));
 		
-
 
 
 		

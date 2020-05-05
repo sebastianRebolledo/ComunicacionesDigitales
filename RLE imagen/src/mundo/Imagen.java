@@ -31,6 +31,7 @@ public class Imagen {
 	private int matrizGreen[][];
 	private int matrizBlue[][];
 	private int matrizPromRGB[][];
+	private int matrizParidad[][];
 
 	private int ancho;
 	private int alto;
@@ -52,6 +53,8 @@ public class Imagen {
 		matrizGreen = new int[ancho][alto];
 		matrizBlue = new int[ancho][alto];
 		matrizPromRGB = new int[ancho][alto];
+		matrizParidad= new int[3][7];
+		inicializarMatrizParidad();
 	}
 
 	/**
@@ -544,29 +547,23 @@ public class Imagen {
 		int contadorBina = 0;
 		ArrayList<String> filasDecoficadas = new ArrayList<String>();
 		for (int i = 0; i < filas.size(); i++) {
-
 			cadenaADecodificar = filas.get(i);
-
 			for (int j = 0; j < cadenaADecodificar.length(); j++) {
 				contador++;
 				if (contador < base2) {
 					valoresActuales += cadenaADecodificar.charAt(j);
 				}
-
 				else if (contador == 8) {
 					valoresActuales += cadenaADecodificar.charAt(j);
 					if (esGuion(valoresActuales)) {
-
 						if (valorAnterior.equals("00101101")) {
 							contadorBina++;
-
 							if (contadorBina == 1) {
 								cadenaDecodificada += binarioADecimal(valoresActuales);
 								valorAnterior = valoresActuales;
 								valoresActuales = "";
 								contador = 0;
 							}
-
 							if (contadorBina == 2) {
 
 								cadenaDecodificada += "-";
@@ -574,20 +571,15 @@ public class Imagen {
 								valoresActuales = "";
 								contador = 0;
 								contadorBina = 0;
-
 							}
-
 						}
-
 						else {
 							cadenaDecodificada += "-";
 							valorAnterior = "00101101";
 							valoresActuales = "";
 							contador = 0;
 						}
-
 					}
-
 					else {
 						cadenaDecodificada += binarioADecimal(valoresActuales);
 						valorAnterior = valoresActuales;
@@ -595,19 +587,13 @@ public class Imagen {
 						contador = 0;
 					}
 				} else {
-
 					valoresActuales += cadenaADecodificar.charAt(j);
-
 				}
-
 			}
-
 			filasDecoficadas.add(cadenaDecodificada);
 			cadenaDecodificada = "";
-
 		}
 		return filasDecoficadas;
-
 	}
 
 	/**
@@ -660,33 +646,21 @@ public class Imagen {
 
 		String cadenaRLE = "";
 		int contador = 0;
-
 		for (int i = 0; i < filasRLE.size(); i++) {
-
 			cadenaRLE = filasRLE.get(i);
-
 			String arreglo[] = cadenaRLE.split("-");
-
 			for (int k = 0; k < arreglo.length; k++) {
 				int actualNumero = Integer.parseInt(arreglo[k]);
-
 				if (k % 2 == 0) {
 					contador += actualNumero;
-
 					int numeroSiguiente = Integer.parseInt(arreglo[k + 1]);
-
 					for (int l = 0; l < actualNumero; l++) {
 						numeros.add(numeroSiguiente);
-
 					}
-
 				}
-
 			}
 			contador = 0;
-
 		}
-
 		return numeros;
 	}
 
@@ -738,5 +712,170 @@ public class Imagen {
 
 		return colaNumeros;
 	}
+	
+	
+	public void inicializarMatrizParidad() {
+		matrizParidad[0][0]=0;
+		matrizParidad[0][1]=1;
+		matrizParidad[0][2]=1;
+		matrizParidad[0][3]=1;
+		matrizParidad[0][4]=1;
+		matrizParidad[0][5]=0;
+		matrizParidad[0][6]=0;
+		matrizParidad[1][0]=1;
+		matrizParidad[1][1]=0;
+		matrizParidad[1][2]=1;
+		matrizParidad[1][3]=1;
+		matrizParidad[1][4]=0;
+		matrizParidad[1][5]=1;
+		matrizParidad[1][6]=0;
+		matrizParidad[2][0]=1;
+		matrizParidad[2][1]=1;
+		matrizParidad[2][2]=0;
+		matrizParidad[2][3]=1;
+		matrizParidad[2][4]=0;
+		matrizParidad[2][5]=0;
+		matrizParidad[2][6]=1;
+	}
+	
+/**
+ * Este metodo se encarga codificar las filas de bits que corresponden a las filas
+ * de la matriz de cada matriz de color y aplicar la codificacion de canal
+ * @param matrizColor
+ * @return resultadoCod- una  lista de cadenas de bits codificada
+ */
+public ArrayList<String> codificarMatrizColorCanar(ArrayList<String> matrizColor) {
+	
+ int contadorPos=0;
+ char[] mensaje= new char[7];
+ String cadenaCodificada="";
+ int constante =7-3;
+ ArrayList<String> resultadoCod= new ArrayList<String>();
+ 
+for (int i = 0; i < matrizColor.size(); i++) {
+	
+	String cadenaBits=matrizColor.get(i);
+	contadorPos=0;
+	while (contadorPos<cadenaBits.length()-1) {
+		   for (int j = 0; j < constante; j++) {
+			mensaje[j]=cadenaBits.charAt(contadorPos);
+			contadorPos++;
+		}
+		   int bChequeo=constante;
+		   int contadorFila=0;
+		   
+		   while(bChequeo<7) {
+			   int cChequeo=0;
+			   
+			   for (int j = 0; j < constante; j++) {
+				
+				   if(matrizParidad[contadorFila][j]==1 && mensaje[j]=='1') {
+					   cChequeo++;
+				   }
+			}
+			   
+			  
+			 if(cChequeo==0||(cChequeo%2)==0) {
+				 mensaje[bChequeo]='0';
+			 }else if ((cChequeo%2)!=0) {
+				mensaje[bChequeo]='1';
+				
+			}
+			   
+			 bChequeo++;
+			 contadorFila++;
+		   }
+		   
+		   for (int k = 0; k < mensaje.length; k++) {
+			cadenaCodificada=cadenaCodificada+mensaje[k];
+		}
+//	System.out.println(cadenaCodificada);
+}
+ 
+	resultadoCod.add(cadenaCodificada);
+	cadenaCodificada="";
+	 
+}
+ 
 
+return resultadoCod;
+
+	
+}
+/**
+ * Este metodo detecta el error, si la suma es 0 no hay  error y si es diferente si lo es.
+ * @param error
+ * @return valor booleano 
+ */
+public boolean detectarElError(int[] error) {
+	if(SumarValorVector(error)==0) {
+		return false;
+	}else {
+		return true;
+	}
+}
+
+/**
+ * Este metodo suma el valor del vector del sindrome
+ * @param error
+ * @return suma - el cual es la suma de las posiciones del sindrome
+ */
+private int SumarValorVector(int[] error) {
+	int suma=0;
+	for (int i = 0; i < error.length-1; i++) {
+		suma&=error[i];
+	}
+	return suma;
+}
+
+
+/**
+ * Este metodo se encarga de calcular el sindrome 
+ * @return
+ */
+public int[] cularElSindrome(int[] error) {
+	int filas=3;
+	int columnas=7;
+	int[] elSindrome= new int[filas];
+	
+	for (int i = 0; i < filas; i++) {
+		int suma=0;
+		for (int j = 0; j < columnas; j++) {
+			suma &=matrizParidad[i][j]*error[j];
+		}
+		elSindrome[i]=suma;
+	}
+	return elSindrome;
+}
+
+/**
+ * Este metodo se encarga de comparar dos vectores entre si
+ * y determinar si son iguales
+ * @return 
+ */
+public boolean sonIguales(int[] v1, int[] v2) {
+	for (int i = 0; i < v2.length; i++) {
+		if((v1[i]^v2[i]) !=0) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
+
+
+
+public int[][] getMatrizParidad() {
+	return matrizParidad;
+}
+
+public void setMatrizParidad(int[][] matrizParidad) {
+	this.matrizParidad = matrizParidad;
+}
+	
+	
+	
+	
+	
 }
