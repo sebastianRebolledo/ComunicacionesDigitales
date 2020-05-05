@@ -802,65 +802,6 @@ return resultadoCod;
 
 	
 }
-/**
- * Este metodo detecta el error, si la suma es 0 no hay  error y si es diferente si lo es.
- * @param error
- * @return valor booleano 
- */
-public boolean detectarElError(int[] error) {
-	if(SumarValorVector(error)==0) {
-		return false;
-	}else {
-		return true;
-	}
-}
-
-/**
- * Este metodo suma el valor del vector del sindrome
- * @param error
- * @return suma - el cual es la suma de las posiciones del sindrome
- */
-private int SumarValorVector(int[] error) {
-	int suma=0;
-	for (int i = 0; i < error.length-1; i++) {
-		suma&=error[i];
-	}
-	return suma;
-}
-
-
-/**
- * Este metodo se encarga de calcular el sindrome 
- * @return
- */
-public int[] cularElSindrome(int[] error) {
-	int filas=3;
-	int columnas=7;
-	int[] elSindrome= new int[filas];
-	
-	for (int i = 0; i < filas; i++) {
-		int suma=0;
-		for (int j = 0; j < columnas; j++) {
-			suma &=matrizParidad[i][j]*error[j];
-		}
-		elSindrome[i]=suma;
-	}
-	return elSindrome;
-}
-
-/**
- * Este metodo se encarga de comparar dos vectores entre si
- * y determinar si son iguales
- * @return 
- */
-public boolean sonIguales(int[] v1, int[] v2) {
-	for (int i = 0; i < v2.length; i++) {
-		if((v1[i]^v2[i]) !=0) {
-			return false;
-		}
-	}
-	return true;
-}
 
 
 
